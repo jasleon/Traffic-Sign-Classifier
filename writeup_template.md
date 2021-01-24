@@ -79,44 +79,80 @@ As a last step, I normalized the image data because feature scaling speeds up th
 
 #### 2. Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
 
+I started with the LeNet architecture from the previous lab. After some experiments, I noticed that this architecture did not generalized well, and therefore the its performance on the validation set was below our target 93%.
+
+I decided to add drop-out layers to improve the regularization of the model.  
+
 My final model consisted of the following layers:
 
 | Layer         		|     Description	        					|
 |:---------------------:|:---------------------------------------------:|
-| Input         		| 32x32x3 RGB image   							|
-| Convolution 3x3     	| 1x1 stride, same padding, outputs 32x32x64 	|
-| RELU					|												|
-| Max pooling	      	| 2x2 stride,  outputs 16x16x64 				|
-| Convolution 3x3	    | etc.      									|
-| Fully connected		| etc.        									|
-| Softmax				| etc.        									|
-|						|												|
-|						|												|
+| Input         		| 32x32x1 grayscale image |
+| Convolution 5x5    | 1x1 stride, valid padding, outputs 28x28x6 |
+| RELU					| nonlinear activation |
+| Max pooling	      	| 2x2 stride, valid padding, outputs 14x14x6 |
+| Drop-out	| 50% keep probability |
+| Convolution 5x5	  | 1x1 stride, valid padding, outputs 10x10x16 |
+| RELU	| nonlinear activation |
+| Max pooling	| 2x2 stride, valid padding, 5x5x16 |
+| Drop-out	| 50% keep probability |
+| Flatten	| outputs 400 |
+| Fully connected	| outputs 120 |
+| RELU	| nonlinear activation |
+| Fully connected	| outputs 84        |
+| RELU	| nonlinear activation |
+| Fully connected	| outputs 43        |
 
 
 
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+The CNN runs through the training dataset 10 times (epochs). I first shuffle the training data every epoch. Then I divide the training set into batches of 128 examples, the Adam optimizer finds the CNN parameters that reduce the softmax entropy function. I train the CNN until all the batches in the dataset are complete, and repeat the operation in the next epoch.    
+
+Here are the hyperparameters that I used to train the model:
+
+| Parameter        | Value |
+| ---------------- | ----- |
+| Number of epochs | 10    |
+| Batch size       | 128   |
+| Learning rate    | 0.001 |
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
 My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+```
+EPOCH 10 ...
+Training Accuracy = 0.985 - Validation Accuracy = 0.953
+```
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+The test set accuracy is:
+
+```
+Test Accuracy = 0.927
+```
+
+*If an iterative approach was chosen:*
+
+* *What was the first architecture that was tried and why was it chosen?*
+
+  At first I tried to use the LeNet architecture from the previous lab by only changing the number of input channels to 3, and the output to 43 classes. I left the hyperparameters unchanged. I chose this architecture because it worked well detecting numbers.
+
+* *What were some problems with the initial architecture?*
+
+  I noticed that I was not getting a good performance on the validation dataset. I firs tried to improve the performance by adding pre-processing steps. These extra steps didn't have a significant impact on performance. 
+
+  I also increased the number of epochs with the same result. The model would increase its performance on the validation step but it plateaued below 93%. 
+
+  I then realized that the poor performance on the validation step indicated that the model was overfitting. 
+
+* *How was the architecture adjusted and why was it adjusted?*
+
+  One way to improve performance in the validation set is adding a dropout layer. The dropout layer randomly sets elements to zero to prevent overfitting.
+
+  I added a dropout layer with a 50% keep probability after each convolutional layer. I did not have to change the hyperparameters from the previous lab.
+
+  
 
 
 ### Test a Model on New Images
