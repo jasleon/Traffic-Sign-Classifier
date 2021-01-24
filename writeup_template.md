@@ -161,42 +161,72 @@ Test Accuracy = 0.927
 
 Here are five German traffic signs that I found on the web:
 
-![alt text][image4] ![alt text][image5] ![alt text][image6] 
-![alt text][image7] ![alt text][image8]
+| Speed limit (30km/h)                          | Yield                                          | Stop                                           | Ahead only                                     | Roundabout mandatory                           |
+| --------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| <img src="images/1.jpg" style="zoom:250%;" /> | <img src="images/13.jpg" style="zoom:250%;" /> | <img src="images/14.jpg" style="zoom:250%;" /> | <img src="images/35.jpg" style="zoom:250%;" /> | <img src="images/40.jpg" style="zoom:250%;" /> |
 
-The first image might be difficult to classify because ...
+The stop sign might be difficult to classify because the sign is not facing front. 
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
 Here are the results of the prediction:
 
+```
+Image 0 - Target = 01, Predicted = 01
+Image 1 - Target = 13, Predicted = 13
+Image 2 - Target = 14, Predicted = 14
+Image 3 - Target = 35, Predicted = 35
+Image 4 - Target = 40, Predicted = 40
+> Model accuracy: 1.000000
+```
+
+Here are the results with the sign names: 
+
 | Image			        |     Prediction	        					|
 |:---------------------:|:---------------------------------------------:|
-| Stop Sign      		| Stop sign   									|
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| Speed limit (30km/h) | Speed limit (30km/h) |
+| Yield    | Yield 						|
+| Stop		| Stop								|
+| Ahead only	| Ahead only	|
+| Roundabout mandatory	| Roundabout mandatory |
 
+The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. 
 
-The model was able to correctly guess 4 of the 5 traffic signs, which gives an accuracy of 80%. This compares favorably to the accuracy on the test set of ...
+This compares favorably to the accuracy on the test set of 92.7%.
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
-The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
+The code for making predictions on my final model is located in the 15th cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+I noticed that the model showed a high confidence in every new example.
 
-| Probability         	|     Prediction	        					|
-|:---------------------:|:---------------------------------------------:|
-| .60         			| Stop sign   									|
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+Here is the top 5 softmax probabilities for each image:
+
+```
+TopKV2(values=array([[9.9993336e-01, 3.7158421e-05, 1.7805256e-05, 1.1165945e-05,
+        3.1811513e-07],
+       [1.0000000e+00, 3.9236458e-08, 4.2566567e-12, 8.0007827e-13,
+        6.8640047e-14],
+       [9.7711074e-01, 1.1851793e-02, 6.3974909e-03, 1.1981662e-03,
+        9.3400793e-04],
+       [1.0000000e+00, 2.8542056e-08, 1.1017173e-08, 2.1248707e-09,
+        2.8237709e-10],
+       [9.9790418e-01, 2.0955123e-03, 1.3549618e-07, 1.1461977e-07,
+        3.4391277e-08]], dtype=float32), indices=array([[ 1,  0,  2,  6,  5],
+       [13, 35, 36, 33, 12],
+       [14, 13,  3,  5, 15],
+       [35, 36, 25, 20, 33],
+       [40, 12, 17, 42,  7]]))
+```
+
+Here is a bar plot of the probabilities:
+
+<p align="center">
+<img src="images/top_5.png"/>
+</p>  
 
 
-For the second image ... 
+This results indicate that the model is almost 100% percent certain of the sign class. This result is not surprising because these examples are clear, well lit, and do not have noise. 
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
